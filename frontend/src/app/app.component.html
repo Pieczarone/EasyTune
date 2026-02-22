@@ -1,0 +1,38 @@
+<div class="card">
+  <h2>Fuel Map VE Correction</h2>
+  <div class="controls tabs">
+    <button *ngFor="let t of tabs" [class.active]="activeTab === t" (click)="activeTab = t">{{ t }}</button>
+  </div>
+
+  <div class="controls">
+    <button class="primary" (click)="generate()">Generate Corrected VE</button>
+    <button (click)="exportCsv()">Export CSV</button>
+    <button (click)="smooth3x3()">Smooth 3x3</button>
+    <button (click)="reset()">Reset</button>
+  </div>
+
+  <div class="controls">
+    <label>Global AFR target override:
+      <input type="number" [formControl]="globalAfrTarget" min="8" max="20" step="0.1">
+    </label>
+    <button (click)="applyGlobalTarget()">Apply to AFR target table</button>
+  </div>
+
+  <p class="warn" *ngIf="warning">{{ warning }}</p>
+</div>
+
+<div class="card" *ngIf="activeTab === 'VE Current'">
+  <app-table-editor [table]="veCurrent" (tableChange)="veCurrent = $event"></app-table-editor>
+</div>
+<div class="card" *ngIf="activeTab === 'AFR Actual'">
+  <app-table-editor [table]="afrActual" (tableChange)="afrActual = $event"></app-table-editor>
+</div>
+<div class="card" *ngIf="activeTab === 'AFR Target'">
+  <app-table-editor [table]="afrTarget" (tableChange)="afrTarget = $event"></app-table-editor>
+</div>
+<div class="card" *ngIf="activeTab === 'VE Corrected' && result">
+  <h3>VE Corrected</h3>
+  <app-table-editor [table]="result.veCorrected" [readonly]="true"></app-table-editor>
+  <h3>Delta %</h3>
+  <app-table-editor [table]="result.deltaPercent" [readonly]="true" [showDeltaHighlight]="true"></app-table-editor>
+</div>
