@@ -1,0 +1,35 @@
+<div class="controls" *ngIf="!readonly">
+  <button (click)="addRpm()">Add RPM</button>
+  <button (click)="addMap()">Add MAP</button>
+  <label>Import RPM CSV <input type="file" accept=".csv" (change)="importAxisCsv($event,'rpm')"></label>
+  <label>Import MAP CSV <input type="file" accept=".csv" (change)="importAxisCsv($event,'map')"></label>
+</div>
+
+<table class="table-preview">
+  <thead>
+  <tr>
+    <th>MAP\RPM</th>
+    <th *ngFor="let rpm of table.rpmAxis; let i = index">
+      <input type="number" [(ngModel)]="table.rpmAxis[i]" [readonly]="readonly" style="width:80px">
+      <div *ngIf="!readonly">
+        <button (click)="moveRpm(i,-1)">◀</button><button (click)="moveRpm(i,1)">▶</button>
+        <button (click)="removeRpm(i)">✕</button>
+      </div>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let map of table.mapAxis; let r = index">
+    <th>
+      <input type="number" [(ngModel)]="table.mapAxis[r]" [readonly]="readonly" style="width:80px">
+      <div *ngIf="!readonly">
+        <button (click)="moveMap(r,-1)">▲</button><button (click)="moveMap(r,1)">▼</button>
+        <button (click)="removeMap(r)">✕</button>
+      </div>
+    </th>
+    <td *ngFor="let _ of table.rpmAxis; let c = index" [class.delta-high]="shouldHighlight(table.values[r][c])">
+      <input type="number" [(ngModel)]="table.values[r][c]" [readonly]="readonly" style="width:70px">
+    </td>
+  </tr>
+  </tbody>
+</table>
